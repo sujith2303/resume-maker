@@ -1,0 +1,197 @@
+
+%-------------------------
+% Resume in Latex
+% Author : Sujith
+% Based off of: https://github.com/sb2nov/resume
+% License : MIT
+%------------------------
+
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\input{glyphtounicode}
+
+
+%----------FONT OPTIONS----------
+% sans-serif
+% \usepackage[sfdefault]{FiraSans}
+% \usepackage[sfdefault]{roboto}
+% \usepackage[sfdefault]{noto-sans}
+% \usepackage[default]{sourcesanspro}
+
+% serif
+% \usepackage{CormorantGaramond}
+% \usepackage{charter}
+
+
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\textheight}{1.0in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+% Ensure that generate pdf is machine readable/ATS parsable
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubSubheading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\small#1} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+ 
+
+            \begin{center}
+                \textbf{\Huge \scshape Sujith Anumala} \\ \vspace{1pt}
+                \small+917386105957 $|$ \href{mailto:x@x.com}{\underline{sujithanumala23@gmail.com}} $|$ 
+                \href{https://linkedin.com/in/...}{\underline{sujith-anumala}} $|$
+    \href{https://github.com/...}{\underline{sujith2303}}
+\end{center}
+
+
+
+    
+    \section{Professional Summary}
+    
+    {Innovative Software Engineer with expertise in Machine Learning, Generative AI, and Embedded Software Development. Proficient in developing cutting-edge AI solutions using advanced techniques like RAG, RLHF, and model optimization. Skilled in Python, C++, and AI frameworks with a strong background in microservices, cloud infrastructure, and performance optimization.}
+    
+    
+    \section{Professional Experience}
+    \resumeSubHeadingListStart
+    
+            \resumeSubheading
+              {Consulting Developer}{Jan 2023 - Present}
+              {Oracle}{Hyderabad, India}
+              \resumeItemListStart
+              
+            
+            \resumeItem{Developed an advanced Information Retrieval Framework using vector databases (FAISS, Chroma dB) and GenAI models, improving team productivity by \textbf{50\%} and reducing query resolution time by \textbf{90\%}}
+            
+            \resumeItem{Implemented \textbf{10+} microservices with Docker, creating scalable APIs for SQL code generation and error resolution using Inter-Process Communication (IPC) principles}
+            
+            \resumeItem{Optimized AI model performance through GPU programming and parallel computing, achieving \textbf{50\%} reduction in training time for NLP and computer vision tasks}
+            
+            \resumeItem{Developed embedded software applications with low-level interactions between operating systems and hardware}
+            
+            \resumeItem{Collaborated with cross-functional teams to design, develop, and validate software solutions, ensuring high-quality deliverables}
+            
+        \resumeItemListEnd
+        
+    \resumeSubHeadingListEnd
+    
+    
+    \section{Projects}
+    \resumeSubHeadingListStart
+    
+        \resumeProjectHeading
+            {\textbf{AI Interviewer} \textit{| Python, PyTorch, RAG, RLHF, LLMs}}{}
+        \resumeItemListStart\resumeItem{Developed an interactive AI application using Retrieval Augmented Generation (RAG) with \textbf{30\%} increase in participant engagement}\resumeItem{Implemented advanced AI techniques including Proximal Policy Optimization (PPO) and Direct Preference Optimization (DPO) to improve response alignment}\resumeItem{Applied model optimization techniques like quantization and model distillation, reducing inference speed by \textbf{2x}}\resumeItemListEnd
+        \resumeProjectHeading
+            {\textbf{QuizBot.AI} \textit{| TensorFlow, NLP, Computer Vision, LLMs}}{}
+        \resumeItemListStart\resumeItem{Created a multimodal Q&A generation system using advanced machine learning techniques}\resumeItem{Fine-tuned custom datasets on T5, Flan-T5, and BERT models using MLOPS pipelines}\resumeItem{Optimized model performance using quantization techniques, achieving \textbf{4x} memory footprint reduction}\resumeItemListEnd\resumeSubHeadingListEnd
+    
+    \section{Technical Skills}
+    \begin{itemize}[leftmargin=0.15in, label={}]
+        \small{\item{
+            \textbf{Languages}{: Python, C++, Java, JavaScript} \\
+            \textbf{Technologies}{: Docker, Kubernetes, Linux, Android, Cloud Infrastructure, MySQL, Oracle Cloud}
+             \\
+            \textbf{Machine Learning Frameworks}{: TensorFlow, PyTorch, Keras, Hugging Face}
+             \\
+            \textbf{AI Technologies}{: LLMs, RAG, RLHF, Model Distillation, Quantization}
+             \\
+            \textbf{Developer Tools}{: Jenkins, Git, Docker, Kubernetes}
+             \\
+            \textbf{Cloud Platforms}{: Oracle Cloud, AWS, Azure}
+             \\
+            \textbf{Databases}{: MySQL, Chroma DB, FAISS}
+             \\
+            \textbf{Embedded Systems}{: Linux, Android, QNX}
+            
+        }}
+    \end{itemize}
+    
+    
+    \section{Education}
+    \resumeSubHeadingListStart
+    
+        \resumeSubheading
+            {VNR Vignana Jyothi Institute of Engineering}{Hyderabad}
+            {Bachelor of Electronics and Communication Engineering}{2019 - 2023}
+        
+    
+    \section{Achievements}
+    \resumeItemListStart
+        \resumeItem{Developed cutting-edge AI solutions with \textbf{50\%} productivity improvement}
+        \resumeItem{Successfully implemented microservices architecture reducing operational complexity}
+        \resumeItem{Recognized for innovative approach to AI model optimization and performance enhancement}
+    \resumeItemListEnd
+
+    \end{document}
+    
