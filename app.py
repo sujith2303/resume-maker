@@ -3,6 +3,7 @@ import os
 import fitz  # PyMuPDF for PDF text extraction
 import pytesseract
 from PIL import Image, UnidentifiedImageError # Added UnidentifiedImageError
+from PIL import Image, UnidentifiedImageError # Added UnidentifiedImageError
 from resume_maker import server
 import logging
 import google.generativeai as genai
@@ -43,7 +44,15 @@ load_system_prompt()
 def extract_text_from_file(file_obj):
     if file_obj is None:
         logging.info("extract_text_from_file called with no file_obj.")
+        logging.info("extract_text_from_file called with no file_obj.")
         return ""
+
+    name = file_obj.name # This is actually the temp file path in Gradio
+    logging.info(f"Attempting to extract text from file: {name}")
+
+    # It's better to use file_obj.name directly as Gradio provides a usable path
+    # For file operations. The 'name' attribute of the tempfile object is its path.
+
 
     name = file_obj.name # This is actually the temp file path in Gradio
     logging.info(f"Attempting to extract text from file: {name}")
@@ -54,8 +63,34 @@ def extract_text_from_file(file_obj):
     ext = os.path.splitext(name)[-1].lower()
     logging.info(f"File extension identified as: {ext}")
 
+    logging.info(f"File extension identified as: {ext}")
+
     # PDF
     if ext == ".pdf":
+        logging.info(f"Processing as PDF: {name}")
+        try:
+            text = ""
+            with fitz.open(name) as doc: # Use 'name' which is the file path
+                for page in doc:
+                    text += page.get_text()
+            if not text.strip():
+                message = "Successfully opened PDF, but no text could be extracted. The PDF might be image-based or empty."
+                logging.warning(f"PDF processing for {name}: {message}")
+                return message
+            logging.info(f"Successfully extracted text from PDF: {name}")
+            return text
+        except fitz.fitz.FZ_ERROR_GENERIC as e: # More specific fitz error
+            message = f"Error processing PDF (FZ_ERROR_GENERIC): {e}. The file might be corrupted or not a valid PDF."
+            logging.error(f"PDF extraction error for {name}: {message}", exc_info=True)
+            return message
+        except RuntimeError as e: # fitz can also raise generic RuntimeError for various issues
+            message = f"Error processing PDF (RuntimeError): {e}. The file might be corrupted or not a valid PDF."
+            logging.error(f"PDF extraction error for {name}: {message}", exc_info=True)
+            return message
+        except Exception as e:
+            message = f"An unexpected error occurred while extracting text from PDF: {e}"
+            logging.error(f"PDF extraction error for {name}: {message}", exc_info=True)
+            return message
         logging.info(f"Processing as PDF: {name}")
         try:
             text = ""
@@ -108,6 +143,32 @@ def extract_text_from_file(file_obj):
             message = f"An unexpected error occurred while processing image: {e}"
             logging.error(f"Image extraction error for {name}: {message}", exc_info=True)
             return message
+        logging.info(f"Processing as Image: {name}")
+        try:
+            image = Image.open(name) # Use 'name'
+            text = pytesseract.image_to_string(image)
+            if not text.strip():
+                message = "Successfully opened image, but Tesseract extracted no text. The image might not contain discernible text."
+                logging.warning(f"Image processing for {name}: {message}")
+                return message
+            logging.info(f"Successfully extracted text from Image: {name}")
+            return text
+        except UnidentifiedImageError:
+            message = f"Error processing image: Cannot identify image file. The file at '{name}' might be corrupted or not a supported image format."
+            logging.error(f"Image extraction error for {name}: {message}", exc_info=True)
+            return message
+        except pytesseract.TesseractNotFoundError:
+            message = "Error processing image: Tesseract is not installed or not found in your PATH."
+            logging.error(f"Image extraction error for {name}: {message}", exc_info=True)
+            return message
+        except pytesseract.TesseractError as e: # More specific Tesseract error
+            message = f"Error processing image with Tesseract: {e}"
+            logging.error(f"Image extraction error for {name}: {message}", exc_info=True)
+            return message
+        except Exception as e:
+            message = f"An unexpected error occurred while processing image: {e}"
+            logging.error(f"Image extraction error for {name}: {message}", exc_info=True)
+            return message
     # Text
     elif ext in [".txt"]:
         logging.info(f"Processing as Text: {name}")
@@ -128,7 +189,28 @@ def extract_text_from_file(file_obj):
             message = f"An unexpected error occurred while reading text file: {e}"
             logging.error(f"Text file read error for {name}: {message}", exc_info=True)
             return message
+        logging.info(f"Processing as Text: {name}")
+        try:
+            with open(name, "r", encoding="utf-8") as f: # Use 'name'
+                text = f.read()
+            if not text.strip():
+                message = "Successfully opened text file, but it appears to be empty."
+                logging.warning(f"Text file processing for {name}: {message}")
+                return message
+            logging.info(f"Successfully extracted text from Text file: {name}")
+            return text
+        except IOError as e:
+            message = f"Error reading text file: {e}"
+            logging.error(f"Text file read error for {name}: {message}", exc_info=True)
+            return message
+        except Exception as e:
+            message = f"An unexpected error occurred while reading text file: {e}"
+            logging.error(f"Text file read error for {name}: {message}", exc_info=True)
+            return message
     else:
+        message = f"Unsupported file type: '{ext}'. Please upload a PDF, text file, or image (PNG, JPG, BMP, TIFF)."
+        logging.warning(f"Unsupported file type for {name}: {ext}")
+        return message
         message = f"Unsupported file type: '{ext}'. Please upload a PDF, text file, or image (PNG, JPG, BMP, TIFF)."
         logging.warning(f"Unsupported file type for {name}: {ext}")
         return message
@@ -320,6 +402,7 @@ with gr.Blocks(title="AI Resume Generator") as demo:
     )
 
 if __name__ == "__main__":
+    logging.info("Starting Gradio App...")
     logging.info("Starting Gradio App...")
     demo.launch()
 
