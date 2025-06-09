@@ -2,9 +2,16 @@
 from typing import Any,List
 import httpx
 from mcp.server.fastmcp import FastMCP
+import logging
+
+# Configure basic logging - this will apply if server.py is run standalone.
+# If imported by app.py, app.py's config (if executed first) might take precedence.
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S')
 
 
-base_resume_latex_file = r"""
+BASE_RESUME_LATEX = r"""
 %-------------------------
 % Resume in Latex
 % Author : Sujith
@@ -117,6 +124,7 @@ base_resume_latex_file = r"""
 # Initialize FastMCP server
 mcp = FastMCP("resume")
 
+CURRENT_RESUME_LATEX = ""
 
 @mcp.tool()
 def header_details_latex(name: str, mobile_number: str, email_id: str, linkedin_profile_link : str, github_link: str) -> str:
@@ -148,9 +156,15 @@ def header_details_latex(name: str, mobile_number: str, email_id: str, linkedin_
 
 
 """
-    with open(r"D:\PC_Downloads\OpenSource\ResumeMaker\MCP_Server\resume_maker\resume.txt","w") as f:
-        f.write(base_resume_latex_file + header_latex)
-    return "Now call professional_summary_latex_tool"
+    global CURRENT_RESUME_LATEX
+    logging.info(f"header_details_latex tool called. Name: {name}, Email: {email_id}")
+    CURRENT_RESUME_LATEX = BASE_RESUME_LATEX + header_latex
+    # with open(r"D:\PC_Downloads\OpenSource\ResumeMaker\MCP_Server\resume_maker\resume.txt","w") as f:
+    #     f.write(BASE_RESUME_LATEX + header_latex)
+    # return base_resume_latex_file + header_latex
+    response_message = "Now call professional_summary_latex_tool"
+    logging.info(f"header_details_latex returning: {response_message}")
+    return response_message
     
 @mcp.tool()
 def professional_summary_latex(summary: str) -> str:
@@ -173,9 +187,15 @@ def professional_summary_latex(summary: str) -> str:
     {{{summary}}}
     """
     summary_latex = summary_latex.replace("%","\%")
-    with open(r"D:\PC_Downloads\OpenSource\ResumeMaker\MCP_Server\resume_maker\resume.txt","a") as f:
-        f.write(summary_latex)
-    return "Now call the experience_latex_tool"
+    global CURRENT_RESUME_LATEX
+    logging.info(f"professional_summary_latex tool called. Summary length: {len(summary)}")
+    CURRENT_RESUME_LATEX += summary_latex
+    # with open(r"D:\PC_Downloads\OpenSource\ResumeMaker\MCP_Server\resume_maker\resume.txt","a") as f:
+    #     f.write(summary_latex)
+    # return summary_latex
+    response_message = "Now call the experience_latex_tool"
+    logging.info(f"professional_summary_latex returning: {response_message}")
+    return response_message
 
 
 
@@ -220,14 +240,19 @@ def experience_latex(experiences: List[dict]) -> str:
         Experience_latex += r"""
         \resumeItemListEnd
         """
-    Experience_latex += r"""
     \resumeSubHeadingListEnd
     """
     Experience_latex = Experience_latex.replace("%","\%")
-    with open(r"D:\PC_Downloads\OpenSource\ResumeMaker\MCP_Server\resume_maker\resume.txt",'a') as f:
-        f.write(Experience_latex)
+    global CURRENT_RESUME_LATEX
+    logging.info(f"experience_latex tool called. Number of experiences: {len(experiences)}")
+    CURRENT_RESUME_LATEX += Experience_latex
+    # with open(r"D:\PC_Downloads\OpenSource\ResumeMaker\MCP_Server\resume_maker\resume.txt",'a') as f:
+    #     f.write(Experience_latex)
     # print(Experience_latex)
-    return "Now call the education_latex tool"
+    # return Experience_latex
+    response_message = "Now call the education_latex tool"
+    logging.info(f"experience_latex returning: {response_message}")
+    return response_message
 
 @mcp.tool()
 def projects_latex(projects: List[dict]) -> str :
@@ -270,10 +295,16 @@ def projects_latex(projects: List[dict]) -> str :
     Projects_latex += r"""\resumeSubHeadingListEnd"""
     Projects_latex = Projects_latex.replace("%","\%")
     
-    with open(r"D:\PC_Downloads\OpenSource\ResumeMaker\MCP_Server\resume_maker\resume.txt",'a') as f:
-        f.write(Projects_latex)
+    global CURRENT_RESUME_LATEX
+    logging.info(f"projects_latex tool called. Number of projects: {len(projects)}")
+    CURRENT_RESUME_LATEX += Projects_latex
+    # with open(r"D:\PC_Downloads\OpenSource\ResumeMaker\MCP_Server\resume_maker\resume.txt",'a') as f:
+    #     f.write(Projects_latex)
         
-    return "Now call the skills_latex tool"
+    # return Projects_latex
+    response_message = "Now call the skills_latex tool"
+    logging.info(f"projects_latex returning: {response_message}")
+    return response_message
 
 @mcp.tool()
 def education_latex(education : List[dict]) -> str:
@@ -307,9 +338,15 @@ def education_latex(education : List[dict]) -> str:
         """
         Education_latex+=studies
     Education_latex = Education_latex.replace("%","\%")
-    with open(r"D:\PC_Downloads\OpenSource\ResumeMaker\MCP_Server\resume_maker\resume.txt",'a') as f:
-        f.write(Education_latex)
-    return "Created a file in you pc"
+    global CURRENT_RESUME_LATEX
+    logging.info(f"education_latex tool called. Number of education entries: {len(education)}")
+    CURRENT_RESUME_LATEX += Education_latex
+    # with open(r"D:\PC_Downloads\OpenSource\ResumeMaker\MCP_Server\resume_maker\resume.txt",'a') as f:
+    #     f.write(Education_latex)
+    # return Education_latex
+    response_message = "Created a file in you pc"
+    logging.info(f"education_latex returning: {response_message}")
+    return response_message
 
 
 @mcp.tool()
@@ -343,10 +380,15 @@ def skills_latex(Programming_languages : List[str], Technologies : List[str], ot
         }}
     \end{itemize}
     """
-
-    with open(r"D:\PC_Downloads\OpenSource\ResumeMaker\MCP_Server\resume_maker\resume.txt",'a') as f:
-        f.write(skills_latex)
-    return "Now call the achievements_latex"
+    global CURRENT_RESUME_LATEX
+    logging.info(f"skills_latex tool called. Programming languages: {len(Programming_languages)}, Technologies: {len(Technologies)}, Other skills categories: {len(other_skills)}")
+    CURRENT_RESUME_LATEX += skills_latex
+    # with open(r"D:\PC_Downloads\OpenSource\ResumeMaker\MCP_Server\resume_maker\resume.txt",'a') as f:
+    #     f.write(skills_latex)
+    # return skills_latex
+    response_message = "Now call the achievements_latex"
+    logging.info(f"skills_latex returning: {response_message}")
+    return response_message
 
 @mcp.tool()
 def achievements_latex(achievements : List[str]) -> str:
@@ -374,12 +416,33 @@ def achievements_latex(achievements : List[str]) -> str:
     \end{document}
     """
     achievements_latex = achievements_latex.replace("%","\%")
+    global CURRENT_RESUME_LATEX
+    logging.info(f"achievements_latex tool called. Number of achievements: {len(achievements)}")
+    CURRENT_RESUME_LATEX += achievements_latex
+    # with open(r"D:\PC_Downloads\OpenSource\ResumeMaker\MCP_Server\resume_maker\resume.txt",'a') as f:
+    #     f.write(achievements_latex)
+    # return achievements_latex
+    response_message = "Created a file in your pc"
+    logging.info(f"achievements_latex returning: {response_message}")
+    return response_message
 
-    with open(r"D:\PC_Downloads\OpenSource\ResumeMaker\MCP_Server\resume_maker\resume.txt",'a') as f:
-        f.write(achievements_latex)
-    return "Created a file in your pc"
+@mcp.tool()
+def get_final_latex_resume() -> str:
+    """
+    Returns the accumulated LaTeX resume string from the current session
+    and resets the session for a new resume.
 
+    Returns:
+        str: The complete LaTeX resume string.
+    """
+    global CURRENT_RESUME_LATEX
+    logging.info("get_final_latex_resume tool called.")
+    final_resume = CURRENT_RESUME_LATEX
+    CURRENT_RESUME_LATEX = ""  # Reset for the next resume
+    logging.info(f"Returning final LaTeX resume (length: {len(final_resume)}). CURRENT_RESUME_LATEX cleared.")
+    return final_resume
 
 if __name__ == "__main__":
     # Initialize and run the server
+    logging.info("Starting FastMCP server...")
     mcp.run(transport='sse')

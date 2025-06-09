@@ -63,7 +63,50 @@ You must generate the resume using specialized tools in the following strict seq
 
 Important: All tool calls must be made sequentially in the exact order listed. Each tool should generate only its relevant section content.
 
+---
+### Output Format Instructions
 
+You MUST output a single, valid JSON object. This JSON object will contain the arguments for each of the specialized tools listed above.
+The main JSON object should have keys that exactly match the tool names (e.g., "Header_details_latex", "Professional_summary_latex", etc.).
+The value for each tool name key must be a dictionary (JSON object) containing the arguments required by that specific tool.
+For example:
+{
+  "Header_details_latex": {
+    "name": "Candidate Name",
+    "mobile_number": "123-456-7890",
+    "email_id": "candidate@example.com",
+    "linkedin_profile_link": "linkedin.com/in/candidate",
+    "github_link": "github.com/candidate"
+  },
+  "Professional_summary_latex": {
+    "summary": "A brief professional summary..."
+  },
+  "Experience_latex": {
+    "experiences": [
+      {
+        "company_name": "Company X",
+        "place": "City, State",
+        "period": "Jan 2020 - Dec 2022",
+        "role": "Software Engineer",
+        "bullet_points": ["Developed feature A using Python.", "Led project B, resulting in C% improvement."]
+      }
+      // ... more experiences
+    ]
+  },
+  // ... and so on for all other tools like Projects_latex, Skills_latex, Education_latex, Achievements_latex
+  "Skills_latex": {
+    "Programming_languages": ["Python", "Java"],
+    "Technologies": ["Docker", "AWS"],
+    "other_skills": {
+      "Databases": ["MySQL", "PostgreSQL"],
+      "Frameworks": ["Flask", "Django"]
+    }
+  },
+  "Achievements_latex": {
+    "achievements": ["Achieved X.", "Awarded Y."]
+  }
+}
 
-
-
+Ensure all string values within the JSON are properly escaped.
+The entire output must be only this JSON object. Do not include any other text or explanations before or after the JSON.
+---
