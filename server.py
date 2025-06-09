@@ -239,7 +239,7 @@ def experience_latex(experiences: List[dict]) -> str:
             """
         Experience_latex += r"""
         \resumeItemListEnd
-        """
+       
     \resumeSubHeadingListEnd
     """
     Experience_latex = Experience_latex.replace("%","\%")

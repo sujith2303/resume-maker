@@ -194,7 +194,7 @@ with gr.Blocks(title="AI Resume Generator") as demo:
 
     generate_btn.click(
         fn=generate_resume,
-        inputs=[user_file, job_description, custom_instructions],
+        inputs=[user_file, job_description, custom_instructions, api_key_textbox],
         outputs=output
     )
 
